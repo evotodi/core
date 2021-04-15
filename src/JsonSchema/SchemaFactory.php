@@ -203,7 +203,13 @@ final class SchemaFactory implements SchemaFactoryInterface
         if(!isset($propertySchema['default'])){
             $default = $propertyMetadata->getDefault();
             if(!is_null($propertyMetadata->getType()) && $propertyMetadata->getType() instanceof Type && $propertyMetadata->getType()->getBuiltinType() == Type::BUILTIN_TYPE_BOOL){
-                $propertySchema['default'] = $default;
+                if($propertyMetadata->getType()->isNullable()){
+                    $propertySchema['default'] = $default;
+                }else{
+                    if(!is_null($default)){
+                        $propertySchema['default'] = $default;
+                    }
+                }
             }else{
                 if(!empty($default)){
                     $propertySchema['default'] = $default;
